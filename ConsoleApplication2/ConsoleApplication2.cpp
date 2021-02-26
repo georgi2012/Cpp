@@ -97,6 +97,16 @@ void printAns(const Library* books, const int n)
 
 int main()
 {
+    long long hugeStuff = 10000000000;
+    long long* thatWillCrash = new (nothrow) long long[hugeStuff];
+    if (!thatWillCrash)
+    {
+        cout << "See? VS works fine!"<<endl;
+        return 1;
+    }
+
+
+
 
     long long n;
     int sortingOrder;
