@@ -11,7 +11,7 @@ void printAns(char **maze, const int height, const int width)
 {
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < height; j++)
+        for (int j = 0; j < width; j++)
         {
             if (maze[i][j] == char(0))
             {
@@ -25,11 +25,11 @@ void printAns(char **maze, const int height, const int width)
     return;
 }
 
-void updateAnswer(char **curMaze, char **&answer, const int &height, const int &width)
+void copyMatrix(char **&curMaze, char **&answer, const int &height, const int &width)
 {
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; i < width; i++)
+        for (int j = 0; j < width; j++)
         {
             answer[i][j] = curMaze[i][j];
         }
@@ -198,7 +198,7 @@ bool pathFinderLong(char **maze, const int width, const int height, unsigned con
 main()
 {
     int width, height;
-    int posX,posY;
+    int posX, posY;
     //input
     cout << "Enter maze width :";
     cin >> width;
@@ -209,63 +209,110 @@ main()
         cout << "Inappropriate size!\n";
         return 1;
     }
-    cout<<"Enter the position (x,y) where you start from . Firstly , X , than Y: ";
-    cin>>posX>>posY;
-    if(posX>=width || posX<0 || posY>=height || posY<0)
+    cout << "Enter the position (x,y) where you start from . Firstly , X , than Y: ";
+    cin >> posX >> posY;
+    if (posX >= width || posX < 0 || posY >= height || posY < 0)
     {
-        cout<<"Wrong coordinates!\n";
+        cout << "Wrong coordinates!\n";
         return 1;
     }
 
-    char **mazeSymbShort = new (nothrow) char *[height];
-    char **mazeSymbLong = new (nothrow) char *[height];
+    char **mazeSymb = new (nothrow) char *[height];
+    if (!mazeSymb)
+    {
+        std::cerr << "Problem allocating enough memory.";
+        return 2;
+    }
+
     char **maze = new (nothrow) char *[height];
+    if (!maze)
+    {
+        delete[] mazeSymb;
+        std::cerr << "Problem allocating enough memory.";
+        return 2;
+    }
+
     for (int i = 0; i < height; i++)
     {
-        mazeSymbShort[i] = new (nothrow) char[width];
-        mazeSymbLong[i] = new (nothrow) char[width];
+        mazeSymb[i] = new (nothrow) char[width];
+        if(!mazeSymb[i])
+        {
+             std::cerr << "Problem allocating enough memory.";
+            for(int j=0;j<=i;j++)
+            {
+                delete[] mazeSymb[j];
+                delete[] maze[j];
+            }
+            delete[] mazeSymb;
+            delete[] maze;
+            return 2;
+        }
         maze[i] = new (nothrow) char[width];
+        if(!maze[i])
+        {
+             std::cerr << "Problem allocating enough memory.";
+            for(int j=0;j<=i;j++)
+            {
+                delete[] mazeSymb[j];
+                delete[] maze[j];
+            }
+            delete[] mazeSymb;
+            delete[] maze;
+            return 2;
+        }
     }
     cout << "By default its set to '0' for empty and 'x' for goal. Starting from (x,y) .\n";
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            cin >> mazeSymbShort[i][j];
-            mazeSymbLong[i][j] = mazeSymbShort[i][j];
-            maze[i][j] = mazeSymbShort[i][j];
+            cin >> mazeSymb[i][j];
+            maze[i][j] = mazeSymb[i][j];
         }
     }
-    //
+    //end of input and declaration
     unsigned int shortestPath = width * height + 1;
     unsigned int longestPath = 0;
     cout << "\nLooking for paths...\n";
-    pathFinderShort(maze, width, height, 0, shortestPath, mazeSymbShort, posY, posX, false);
+    pathFinderShort(maze, width, height, 0, shortestPath, mazeSymb, posY, posX, false);
     if (shortestPath == width * height + 1)
     {
         cout << "No path found!\n";
     }
     else
     {
-        pathFinderShort(maze, width, height, 0, shortestPath, mazeSymbShort, posY, posX, true);
+        pathFinderShort(maze, width, height, 0, shortestPath, mazeSymb, posY, posX, true);
         cout << "\nThe shortest path is " << shortestPath << endl;
-        printAns(mazeSymbShort, height, width);
-
-        pathFinderLong(maze, width, height, 0, longestPath, mazeSymbLong, posY, posX, false);
-        pathFinderLong(maze, width, height, 0, longestPath, mazeSymbLong, posY, posX, true);
+        printAns(mazeSymb, height, width);
+        //
+        copyMatrix(maze, mazeSymb, height, width); //nullify mazeSymb
+        //
+        pathFinderLong(maze, width, height, 0, longestPath, mazeSymb, posY, posX, false);
+        pathFinderLong(maze, width, height, 0, longestPath, mazeSymb, posY, posX, true);
+        //
         cout << "\nThe longest path is " << longestPath << endl;
-        printAns(mazeSymbLong, height, width);
+        printAns(mazeSymb, height, width);
     }
 
     for (int i = 0; i < height; i++)
     {
-        delete[] mazeSymbShort[i];
-        delete[] mazeSymbLong[i];
+        delete[] mazeSymb[i];
         delete[] maze[i];
     }
-    delete[] mazeSymbShort;
-    delete[] mazeSymbLong;
+    delete[] mazeSymb;
     delete[] maze;
 
     return 0;
 }
+/* test input
+
+6 7 0 0
+001111
+01100x
+000010
+011110
+011110
+000000
+00000x
+
+*/
