@@ -13,9 +13,9 @@ void printAns(char **maze, const int height, const int width)
     {
         for (int j = 0; j < height; j++)
         {
-            if(maze[i][j]==char(0))
+            if (maze[i][j] == char(0))
             {
-                cout<<"X";
+                cout << "X";
                 continue;
             }
             cout << maze[i][j];
@@ -37,84 +37,168 @@ void updateAnswer(char **curMaze, char **&answer, const int &height, const int &
     return;
 }
 
-void pathFinderRec(char **maze, const int width, const int height, unsigned const int curPathLenght,
-                   unsigned int &shortest, unsigned int &longest, char **shortestMaze, char **longestMaze, const int posX, const int posY)
+bool pathFinderShort(char **maze, const int width, const int height, unsigned const int curPathLenght,
+                     unsigned int &shortest, char **shortestMaze, const int posX, const int posY, bool isSecondRun)
 {
-    if (maze[posX][posY] == 'x' || maze[posX][posY] == 'x') //goal!
+    if (maze[posX][posY] == 'x') //goal!
     {
-        if (curPathLenght > longest)
+        if (!isSecondRun && curPathLenght < shortest)
         {
-            longest = curPathLenght;//cout<<"\nLongest: "<<longest<<" ";
-            updateAnswer(maze, longestMaze, height, width);
-             
-            if (curPathLenght < shortest)
-            {
-                shortest = curPathLenght; //cout<<"\nShortest: "<<shortest<<" ";
-                updateAnswer(maze, shortestMaze, height, width);
-            }
-            return ;
+            shortest = curPathLenght;
+            //updateAnswer(maze, shortestMaze, height, width);
+            return false;
         }
-        else if (curPathLenght < shortest)
+        if (isSecondRun && curPathLenght == shortest)
         {
-            shortest = curPathLenght;//cout<<"\nShortest: "<<shortest<<" ";
-            updateAnswer(maze, shortestMaze, height, width);
-            return;
+            shortestMaze[posX][posY] = char(0);
+            return true;
         }
-        return ;
+        return false;
     }
-
     maze[posX][posY] = char(0); //marked
+    bool isAns = false;
 
-    if (posX + 1 < height && (maze[posX + 1][posY] == '0' || maze[posX + 1][posY] == 'x' ))
+    if (posX + 1 < height && (maze[posX + 1][posY] == '0' || maze[posX + 1][posY] == 'x'))
     {
-        pathFinderRec(maze, width, height, curPathLenght + 1, shortest, longest, shortestMaze, longestMaze, posX + 1, posY);
+        if (pathFinderShort(maze, width, height, curPathLenght + 1, shortest, shortestMaze, posX + 1, posY, isSecondRun))
+        {
+            isAns = true;
+            if (isSecondRun)
+            {
+                shortestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
+            }
+        }
     }
     if (posX - 1 > 0 && (maze[posX - 1][posY] == '0' || maze[posX - 1][posY] == 'x'))
     {
-        pathFinderRec(maze, width, height, curPathLenght + 1, shortest, longest, shortestMaze, longestMaze, posX - 1, posY);
-    }
-    if (posY + 1 < width && (maze[posX][posY + 1] == '0' || maze[posX][posY + 1] == 'x'))
-    {
-        pathFinderRec(maze, width, height, curPathLenght + 1, shortest, longest, shortestMaze, longestMaze, posX, posY + 1);
-    }
-    if (posY - 1 > 0 && (maze[posX][posY - 1] == '0' || maze[posX][posY - 1] == 'x'))
-    {
-        pathFinderRec(maze, width, height, curPathLenght + 1, shortest, longest, shortestMaze, longestMaze, posX, posY - 1);
-    }
-
-    maze[posX][posY] = '0'; //unmark path
-    return;
-}
-
-/*int **convertToInt(char **mazeChar, const int width, const int height)
-{
-    int **mazeInt = new (nothrow) int *[height];
-    for (int i = 0; i < height; i++)
-    {
-        mazeInt[i] = new (nothrow) int[width];
-
-        for (int j = 0; j < width)
+        if (pathFinderShort(maze, width, height, curPathLenght + 1, shortest, shortestMaze, posX - 1, posY, isSecondRun))
         {
-            if (mazeChar[i][j] == '0')
+            isAns = true;
+            if (isSecondRun)
             {
-                mazeInt[i][j] = -300; //-300 are empty
-            }
-            else if (mazeChar[i][j] == 'x')
-            {
-                mazeInt[i][j] = 300; //goal
-            }
-            else
-            {
-                mazeInt[i][j] = (int)mazeChar[i][j];
+                shortestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
             }
         }
     }
-    return mazeInt;
-}*/
+    if (posY + 1 < width && (maze[posX][posY + 1] == '0' || maze[posX][posY + 1] == 'x'))
+    {
+        if (pathFinderShort(maze, width, height, curPathLenght + 1, shortest, shortestMaze, posX, posY + 1, isSecondRun))
+        {
+            isAns = true;
+            if (isSecondRun)
+            {
+                shortestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
+            }
+        }
+    }
+    if (posY - 1 > 0 && (maze[posX][posY - 1] == '0' || maze[posX][posY - 1] == 'x'))
+    {
+        if (pathFinderShort(maze, width, height, curPathLenght + 1, shortest, shortestMaze, posX, posY - 1, isSecondRun))
+        {
+            isAns = true;
+            if (isSecondRun)
+            {
+                shortestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
+            }
+        }
+    }
+
+    maze[posX][posY] = '0'; //unmark path
+
+    return isAns;
+}
+
+bool pathFinderLong(char **maze, const int width, const int height, unsigned const int curPathLenght,
+                    unsigned int &longest, char **longestMaze, const int posX, const int posY, bool isSecondRun)
+{
+    if (maze[posX][posY] == 'x') //goal!
+    {
+        if (!isSecondRun && curPathLenght > longest)
+        {
+            longest = curPathLenght;
+            //updateAnswer(maze, shortestMaze, height, width);
+            return false; //found
+        }
+        if (isSecondRun && curPathLenght == longest)
+        {
+            longestMaze[posX][posY] = char(0);
+            return true;
+        }
+        return false;
+    }
+
+    maze[posX][posY] = char(0); //marked
+    bool isAns = false;
+
+    if (posX + 1 < height && (maze[posX + 1][posY] == '0' || maze[posX + 1][posY] == 'x'))
+    {
+        if (pathFinderLong(maze, width, height, curPathLenght + 1, longest, longestMaze, posX + 1, posY, isSecondRun))
+        {
+            isAns = true;
+            if (isSecondRun)
+            {
+                longestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
+            }
+        }
+    }
+    if (posX - 1 > 0 && (maze[posX - 1][posY] == '0' || maze[posX - 1][posY] == 'x'))
+    {
+        if (pathFinderLong(maze, width, height, curPathLenght + 1, longest, longestMaze, posX - 1, posY, isSecondRun))
+        {
+            isAns = true;
+            if (isSecondRun)
+            {
+                longestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
+            }
+        }
+    }
+    if (posY + 1 < width && (maze[posX][posY + 1] == '0' || maze[posX][posY + 1] == 'x'))
+    {
+        if (pathFinderLong(maze, width, height, curPathLenght + 1, longest, longestMaze, posX, posY + 1, isSecondRun))
+        {
+            isAns = true;
+            if (isSecondRun)
+            {
+                longestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
+            }
+        }
+    }
+    if (posY - 1 > 0 && (maze[posX][posY - 1] == '0' || maze[posX][posY - 1] == 'x'))
+    {
+        if (pathFinderLong(maze, width, height, curPathLenght + 1, longest, longestMaze, posX, posY - 1, isSecondRun))
+        {
+            isAns = true;
+            if (isSecondRun)
+            {
+                longestMaze[posX][posY] = char(0);
+                maze[posX][posY] = '0';
+                return isAns;
+            }
+        }
+    }
+
+    maze[posX][posY] = '0'; //unmark path
+    return isAns;
+}
 
 main()
 {
     int width, height;
+    int posX,posY;
     //input
     cout << "Enter maze width :";
     cin >> width;
@@ -122,9 +206,17 @@ main()
     cin >> height;
     if (width <= 0 || height <= 0)
     {
-        cout << "Inappropriate size!";
+        cout << "Inappropriate size!\n";
         return 1;
     }
+    cout<<"Enter the position (x,y) where you start from . Firstly , X , than Y: ";
+    cin>>posX>>posY;
+    if(posX>=width || posX<0 || posY>=height || posY<0)
+    {
+        cout<<"Wrong coordinates!\n";
+        return 1;
+    }
+
     char **mazeSymbShort = new (nothrow) char *[height];
     char **mazeSymbLong = new (nothrow) char *[height];
     char **maze = new (nothrow) char *[height];
@@ -134,7 +226,7 @@ main()
         mazeSymbLong[i] = new (nothrow) char[width];
         maze[i] = new (nothrow) char[width];
     }
-    cout << "By default its set to '0' for empty and 'x' for goal. Starting from (0,0) .\n";
+    cout << "By default its set to '0' for empty and 'x' for goal. Starting from (x,y) .\n";
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -145,17 +237,25 @@ main()
         }
     }
     //
-
-    //int **maze = convertToInt(mazeSymbShort, width, height);
-
     unsigned int shortestPath = width * height + 1;
     unsigned int longestPath = 0;
-    cout<<"Looking for paths...\n";
-    pathFinderRec(maze, width, height, 0, shortestPath, longestPath, mazeSymbShort, mazeSymbLong, 0, 0);
-    cout << "\nThe shortest path is " << shortestPath << endl;
-    printAns(mazeSymbShort, height, width);
-    cout << "\nThe longest path is " << longestPath << endl;
-    printAns(mazeSymbLong, height, width);
+    cout << "\nLooking for paths...\n";
+    pathFinderShort(maze, width, height, 0, shortestPath, mazeSymbShort, posY, posX, false);
+    if (shortestPath == width * height + 1)
+    {
+        cout << "No path found!\n";
+    }
+    else
+    {
+        pathFinderShort(maze, width, height, 0, shortestPath, mazeSymbShort, posY, posX, true);
+        cout << "\nThe shortest path is " << shortestPath << endl;
+        printAns(mazeSymbShort, height, width);
+
+        pathFinderLong(maze, width, height, 0, longestPath, mazeSymbLong, posY, posX, false);
+        pathFinderLong(maze, width, height, 0, longestPath, mazeSymbLong, posY, posX, true);
+        cout << "\nThe longest path is " << longestPath << endl;
+        printAns(mazeSymbLong, height, width);
+    }
 
     for (int i = 0; i < height; i++)
     {
