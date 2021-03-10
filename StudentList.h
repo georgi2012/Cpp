@@ -9,7 +9,6 @@ private:
     unsigned short size;
     int searchInTheList(int FN) const;
     void copyStudents(Student *&newStudents,Student* &students) ;
-
 public:
     StudentList(int capacity);
     void add(const Student &student);

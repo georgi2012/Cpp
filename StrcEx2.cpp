@@ -10,6 +10,7 @@ using std::endl;
 using std::nothrow;
 
 StudentList::StudentList(int capacity)
+
 {
     if (capacity < 0)
     {

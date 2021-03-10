@@ -15,7 +15,6 @@ private:
     bool isValidGroup(const int group) const;
 
     friend class StudentList;
-
 public:
     Student();
     Student(int facultyNumber, const char *name, const char *major, int group);
