@@ -3,7 +3,7 @@
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 #define KEY_ESC 27
-
+ 
 #include <conio.h>
 #include <stdio.h>
 //#include <windows.h>
