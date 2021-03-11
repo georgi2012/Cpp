@@ -1,7 +1,7 @@
 #pragma once
 #include "Student.h"
 
-struct StudentList
+class StudentList
 {
 private:
     Student *students; // up to 200
