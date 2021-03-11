@@ -1,13 +1,5 @@
-#pragma once
-#include <iostream>
-#include <cstring>
 #include "Course.h"
 #include "StudentFunc.h"
-
-using std::cin;
-using std::cout;
-using std::endl;
-using std::nothrow;
 
 Course::Course()
 {
@@ -30,7 +22,7 @@ Course::Course(char *courseName, const unsigned int courseCapacity)
 
     size = 0;
     capacity = courseCapacity;
-    students = new (nothrow) Student[capacity];
+    students = new (std::nothrow) Student[capacity];
     if (!students)
     {
         std::cerr << "There was a problem allocating enough memory for all students. Capacity set to 0.\n";
@@ -109,7 +101,7 @@ bool Course::setCourseCapacity(unsigned int newCapacity)
     }
     else // new > old || (new<old && size < new)
     {
-        Student* newStudents=new (nothrow) Student[newCapacity];
+        Student* newStudents=new (std::nothrow) Student[newCapacity];
         if(!newStudents)
         {
             std::cerr<<"There was a problem allocating enough memmory. ";
@@ -138,8 +130,3 @@ Course::~Course(){
     size=0;
 }
 
-
-/*int main()
-{
-    return 0;
-}*/

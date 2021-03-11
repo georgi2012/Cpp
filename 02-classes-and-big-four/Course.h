@@ -7,7 +7,10 @@ private:
     Student *students;
     unsigned int size;
 
+    friend class RetiredTeacher;
+
 public:
+    Course();
     Course(char* courseName, const unsigned int courseCapacity);
     ~Course();
     bool enrolStudent(const Student newStudent);
