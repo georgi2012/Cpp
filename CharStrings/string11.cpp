@@ -122,4 +122,8 @@ int main()
     }
     delete[] strings;
     return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a8244f8c4d6a91ab22b583eb72c2d0471045acf7

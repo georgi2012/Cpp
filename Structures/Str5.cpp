@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 
 using std::cin;
 using std::cout;
@@ -13,7 +13,7 @@ struct Library
     long price;
 };
 
-void inputBook(Library& book)
+void inputBook(Library &book)
 {
     cout << "Author: " << endl;
     cin.sync();
@@ -26,7 +26,7 @@ void inputBook(Library& book)
     return;
 }
 
-void sortByAuthor(Library* books, const int n)
+void sortByAuthor(Library *books, const int n)
 {
     for (int i = 0; i < n - 1; i++)
     {
@@ -47,7 +47,7 @@ void sortByAuthor(Library* books, const int n)
     return;
 }
 
-void sortByTitle(Library* books, const int n)
+void sortByTitle(Library *books, const int n)
 {
     for (int i = 0; i < n - 1; i++)
     {
@@ -68,7 +68,7 @@ void sortByTitle(Library* books, const int n)
     return;
 }
 
-void sortByPrice(Library* books, const int n)
+void sortByPrice(Library *books, const int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -83,7 +83,7 @@ void sortByPrice(Library* books, const int n)
     return;
 }
 
-void printAns(const Library* books, const int n)
+void printAns(const Library *books, const int n)
 {
     cout << endl;
     for (int i = 0; i < n; i++)
@@ -97,16 +97,6 @@ void printAns(const Library* books, const int n)
 
 int main()
 {
-    long long hugeStuff = 10000000000;
-    long long* thatWillCrash = new (nothrow) long long[hugeStuff];
-    if (!thatWillCrash)
-    {
-        cout << "See? VS works fine!"<<endl;
-        return 1;
-    }
-
-
-
 
     long long n;
     int sortingOrder;
@@ -125,7 +115,7 @@ int main()
         cout << "Exception";
         return 2;
     }*/
-    Library* books = new (nothrow) Library[n];
+    Library *books = new (nothrow) Library[n];
 
     if (books == nullptr)
     {
