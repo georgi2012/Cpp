@@ -18,5 +18,4 @@ public:
     bool contains(const Student &student) const;
     void print() const; 
     ~StudentList();
-    
 };

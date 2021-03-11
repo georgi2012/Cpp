@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Student
 {
 private:
@@ -15,6 +14,7 @@ private:
     bool isValidGroup(const int group) const;
 
     friend class StudentList;
+
     friend class Course;
 public:
     Student();
