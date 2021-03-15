@@ -1,1 +1,1 @@
-//Solutions of problems from OOP Seminars
+//Solutions of problems from OOP Practicums
