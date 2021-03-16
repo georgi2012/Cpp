@@ -8,6 +8,7 @@ Vector::Vector()
 	size = 0;
 }
 
+
 Vector::Vector(size_t n)
 { 
 	size = n;

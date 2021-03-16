@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Vector.h"
+
 using std::cout;
 using std::cin;
 using std::endl;
