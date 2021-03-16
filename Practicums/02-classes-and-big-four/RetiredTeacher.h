@@ -3,7 +3,7 @@
 
 class RetiredTeacher{
     private:
-        char teacherName[71];
+        char teacherName[101];
         unsigned int yearsOfTeaching;
         unsigned int numberOfCourses;
         unsigned int courseCapacity;
@@ -20,5 +20,8 @@ class RetiredTeacher{
         bool hasTaught(char* courseName) const ;
         bool hasTaught(Course course) const ;
         void printInfo() const;
+        //additional setters
+        void setName(char* newName);
+        void setYears(unsigned const newYears);
 
 };
