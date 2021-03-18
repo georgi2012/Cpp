@@ -108,7 +108,7 @@ void timerStart(char **map, int *walls) //should be called every interval of tim
     }).detach();
 }
 
-
+/*
 void ClearScreen()
   {
   HANDLE                     hStdOut;
@@ -120,11 +120,11 @@ void ClearScreen()
   hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
   if (hStdOut == INVALID_HANDLE_VALUE) return;
 
-  /* Get the number of cells in the current buffer */
+  // Get the number of cells in the current buffer 
   if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
   cellCount = csbi.dwSize.X *csbi.dwSize.Y;
 
-  /* Fill the entire buffer with spaces */
+  // Fill the entire buffer with spaces 
   if (!FillConsoleOutputCharacter(
     hStdOut,
     (TCHAR) ' ',
@@ -133,7 +133,7 @@ void ClearScreen()
     &count
     )) return;
 
-  /* Fill the entire buffer with the current colors and attributes */
+  // Fill the entire buffer with the current colors and attributes 
   if (!FillConsoleOutputAttribute(
     hStdOut,
     csbi.wAttributes,
@@ -142,9 +142,16 @@ void ClearScreen()
     &count
     )) return;
 
-  /* Move the cursor home */
+  
   SetConsoleCursorPosition( hStdOut, homeCoords );
   }
+  */
+void ClearScreen()
+{
+    system("CLS");
+}
+
+
 void printMap(char **map)
 {
     //system("CLS");
@@ -212,9 +219,14 @@ void updateMapWalls(int *walls, char **map) //wall cell is the column and it's v
         return;
     }
     //else move the star
-
-    map[star[0]][star[1]] = ' ';
-    map[++star[0]][star[1]] = STAR_ICON;
+    if (star[0] < MAX_POSITION) {
+        map[star[0]][star[1]] = ' ';
+        map[++star[0]][star[1]] = STAR_ICON;
+    }
+    else {
+        map[star[0]][star[1]] = ' ';
+        addNewStar(walls);
+    }
 
     return;
 }
@@ -341,7 +353,7 @@ int main()
         printMap(map);
 
         //if (kbhit()) {
-        c = getch();
+        c = _getch();
         switch (c)
         {
         case KEY_UP:
