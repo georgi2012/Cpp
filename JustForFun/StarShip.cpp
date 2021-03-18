@@ -16,7 +16,7 @@
 //using namespace std;
 
 using std::cout;
-using std::endl;
+using std::endl; 
 using std::thread;
 
 const int MAX_POSITION = 9;
