@@ -13,10 +13,10 @@
 #include <windows.h>
 //too many includes already ;(
 
-//using namespace std; 
+
 
 using std::cout;
-using std::endl; 
+using std::endl;
 using std::thread;
 
 const int MAX_POSITION = 9;
@@ -29,18 +29,38 @@ int points = 0;
 int interval = 1000;
 int position = 4;
 int linesInFront = 4;
+int bestResult = 0;
 int star[2]; //[row][col]
 bool NewWall=false;
-int bestResult=0;
+bool canMoveShip = false;
+bool gameOver = false;
 //
 //prototypes
 void printMap(char **map);
 void updateMapWalls(int *walls, char **map);
 //
+void gameOverPrint()
+{
+    system("CLS");
+    cout << "    ███▀▀▀██┼███▀▀▀███┼███▀█▄█▀███┼██▀▀▀\n";
+    cout << "    ██┼┼┼┼██┼██┼┼┼┼┼██┼██┼┼┼█┼┼┼██┼██┼┼┼\n";
+    cout << "    ██┼┼┼▄▄▄┼██▄▄▄▄▄██┼██┼┼┼▀┼┼┼██┼██▀▀▀\n";
+    cout << "    ██┼┼┼┼██┼██┼┼┼┼┼██┼██┼┼┼┼┼┼┼██┼██┼┼┼\n";
+    cout << "    ███▄▄▄██┼██┼┼┼┼┼██┼██┼┼┼┼┼┼┼██┼██▄▄▄\n";
+    cout << "    ┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼\n";
+    cout << "    ███▀▀▀███┼▀███┼┼██▀┼██▀▀▀┼██▀▀▀▀██▄┼\n";
+    cout << "    ██┼┼┼┼┼██┼┼┼██┼┼██┼┼██┼┼┼┼██┼┼┼┼┼██┼\n";
+    cout << "    ██┼┼┼┼┼██┼┼┼██┼┼██┼┼██▀▀▀┼██▄▄▄▄▄▀▀┼\n";
+    cout << "    ██┼┼┼┼┼██┼┼┼██┼┼█▀┼┼██┼┼┼┼██┼┼┼┼┼██┼\n";
+    cout << "    ███▄▄▄███┼┼┼─▀█▀┼┼─┼██▄▄▄┼██┼┼┼┼┼██▄\n";
+    cout << "\n   Your best score is : " << bestResult<<endl;
+    return;
 
+}
 void hitWall()
 {
-    points--;
+    gameOver = true;
+    gameOverPrint();
 }
 void claimStar()
 {
@@ -98,14 +118,17 @@ void addNewWall(int *walls)
 void timerStart(char **map, int *walls) //should be called every interval of time
 {
     std::thread([map, walls]() {
-        while (true)
+        while (!gameOver)
         {
             // printMap(map);
             updateMapWalls(walls, map);
             printMap(map);
             std::this_thread::sleep_for(std::chrono::milliseconds(interval));
         }
+   
     }).detach();
+
+    
 }
 
 /*
@@ -154,6 +177,11 @@ void ClearScreen()
 
 void printMap(char **map)
 {
+    if (gameOver)
+    {
+        gameOverPrint();
+        return;
+    }
     //system("CLS");
     ClearScreen();
     cout << endl;
@@ -178,6 +206,7 @@ void printMap(char **map)
     }
     cout<<"Best result: "<<bestResult<<endl
          << std::flush;
+    canMoveShip = true;
     return;
 }
 
@@ -219,11 +248,14 @@ void updateMapWalls(int *walls, char **map) //wall cell is the column and it's v
         return;
     }
     //else move the star
-    if (star[0] < MAX_POSITION) {
+    if (star[0] < MAX_POSITION-1) {
         map[star[0]][star[1]] = ' ';
         map[++star[0]][star[1]] = STAR_ICON;
     }
     else {
+        if (points > 0) {
+            points--;
+        }
         map[star[0]][star[1]] = ' ';
         addNewStar(walls);
     }
@@ -315,6 +347,18 @@ void moveRight(int &position, int &linesInFront, char **map, int *walls)
     return;
 }
 
+void delData(char** &map, int* &walls)
+{
+    for (int i = 0; i < MAX_LINES; i++)
+    {
+        delete[] map[i];
+    }
+    delete[] map;
+    delete[] walls;
+    return;
+
+}
+
 int main()
 {
     //cout << std::flush;
@@ -348,38 +392,40 @@ int main()
 
     int c = 0;
 
-    while (c != KEY_ESC) //esc key code is 27
+
+    while (c != KEY_ESC && !gameOver) //esc key code is 27
     {
         printMap(map);
 
         //if (kbhit()) {
+        
         c = _getch();
+        if(canMoveShip ){
         switch (c)
         {
         case KEY_UP:
             moveUp(position, linesInFront, map, walls); //key up
+            canMoveShip = false;
             break;
         case KEY_DOWN:
             moveDown(position, linesInFront, map, walls); // key down
+            canMoveShip = false;
             break;
         case KEY_LEFT:
             moveLeft(position, linesInFront, map, walls);
+            canMoveShip = false;
             break;
         case KEY_RIGHT:
             moveRight(position, linesInFront, map, walls); // key right
+            canMoveShip = false;
             break;
 
         } //switch
-          // }//if
+       }//if
     }     //while
 
-    for (int i = 0; i < MAX_LINES; i++)
-    {
-        delete[] map[i];
-    }
-    delete[] map;
-    delete[] walls;
-    //system("CLS");
+
+    delData(map, walls);
     
     return 0;
 }
