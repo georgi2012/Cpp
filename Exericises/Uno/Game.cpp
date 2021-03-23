@@ -1,8 +1,9 @@
 #include <iostream>
 #include <cstdlib>
-#include <time.h>
 #include <windows.h>
+#include <ctime>
 #include "Game.h"
+//#include <conio.h>
 
 using std::cin;
 using std::cout;
@@ -10,6 +11,16 @@ using std::endl;
 
 Game::Game()
 {
+    cardsInPile=4*9;
+
+    for(int i=0;i<4;i++)
+    {
+        for(int j=0;j<9;j++)
+        {
+            cardsPile[i][j]=1; // we can draw that card
+        }
+    }
+
     for (int i = 0; i < 2; ++i)
     {
         for (int j = 0; j < 3; j++)
@@ -24,7 +35,10 @@ Game::Game()
 Card Game::generateCard()
 {
     Card newCard;
-
+    if(cardsInPile==0)
+    {
+        
+    }
     //srand(time(NULL));
     newCard.number = rand() % 9 + 1;
     newCard.clr = static_cast<COLOR>(rand() % 4 + 1);
@@ -47,7 +61,7 @@ void Game::printCurentCard()
         cout << R"( |_|  \_\___|\__,_| )" << endl;
         break;
     }
-    case yellow:
+    case blue:
     {
         cout << endl;
         cout << "   ____  _   " << endl;
@@ -59,7 +73,7 @@ void Game::printCurentCard()
              << endl;
         break;
     }
-    case green:
+    case yellow:
     {
         cout << R"(              _ _               )" << endl;
         cout << R"(             | | |              )" << endl;
@@ -71,7 +85,7 @@ void Game::printCurentCard()
 
         break;
     }
-    case blue:
+    case green:
     {
         cout << R"(   __ _ _ __ ___  ___ _ __   )" << endl;
         cout << R"(  / _` | '__/ _ \/ _ \ '_ \  )" << endl;
@@ -95,7 +109,7 @@ void Game::printGame()
 {
     system("cls");
     printCurentCard();
-    cout << "Player " << isFPlRound << " 's turn \n";
+    cout << "Player " << isFPlRound+1 << " 's turn \n";
     players[isFPlRound].printHand();
     cout << "\n" << players[isFPlRound].getHandSize() << ". Draw a card.";
     cout << "\n ";
@@ -157,7 +171,7 @@ int main()
     {
         // :)
     }
-    cout << " And the big winner is Player " << gameSession.getPlayerRound() << " !\n";
+    cout << " And the big winner is Player " << gameSession.getPlayerRound()+1 << " !\n";
 
     return 0;
 }

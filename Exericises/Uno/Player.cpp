@@ -84,16 +84,16 @@ void Player::printHand()
              << i << ". ";
         switch (hand[i].clr)
         {
-        case 1:
+        case red:
             cout << " Red ";
             break;
-        case 2:
+        case blue:
             cout << " Blue ";
             break;
-        case 3:
+        case green:
             cout << " Green ";
             break;
-        case 4:
+        case yellow:
             cout << " Yellow ";
             break;
         default:
@@ -104,12 +104,13 @@ void Player::printHand()
     } //for
 }
 
-bool Player::isValidCard(unsigned short &cardToPlay ,Card &lastCard)
+bool Player::isValidCard(const unsigned short cardToPlay ,Card lastCard) const
 {
    return (cardToPlay==curNumberOfCards ||  hand[cardToPlay].clr==lastCard.clr || hand[cardToPlay].number==lastCard.number);
 }//cardToPlay==curNumberOfCards  means drawing a card
 
 bool Player::playCard(unsigned short cardToPlay ,Card lastCard){
-    cout<<isValidCard(cardToPlay,lastCard)<<" clr "<<hand[cardToPlay].clr <<" num "<<hand[cardToPlay].clr;
+    //cout<<cardToPlay<<isValidCard(cardToPlay,lastCard)<<" clr "<<hand[cardToPlay].clr <<" num "<<hand[cardToPlay].number<<std::endl;
+    //cout<<"cur card: "<<lastCard.clr<<" num: "<<lastCard.number<<std::endl;
       return isValidCard(cardToPlay,lastCard); // not much sense but it's more readable that way...
 }

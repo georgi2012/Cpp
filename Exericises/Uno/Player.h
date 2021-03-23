@@ -25,7 +25,7 @@ class Player{
         
 
     private:
-        bool isValidCard(unsigned short &cardToPlay ,Card& lastCard);
+        bool isValidCard(const unsigned short cardToPlay ,Card lastCard) const;
        // Card removeCard(short index);
         
 

@@ -3,11 +3,15 @@
 
 class Game{
     private:
+        
          //int numberOfPlayers; //=2
-         //bool cardsPile[4][9]; //unique cards to be drawn 
+         bool cardsPile[4][9]; //unique cards to be drawn 
+         unsigned cardsInPile;
          Player players[2];
          Card currentCard;
          bool isFPlRound; //is first player's turn
+
+         void shuffleNewPile(Card* frstPlrHand , Card* scndPlrHand); //called when pile is empty 
          
     
     public :
@@ -24,19 +28,3 @@ class Game{
 };
 
 
-/*
-
-
- Current card :  red  2  //current Idea 
-
-   0. /red 3 /
-   1. /yellow 4/
-
-
-
-   Updated idea :
-
-
-
-
-*/

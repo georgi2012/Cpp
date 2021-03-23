@@ -10,7 +10,7 @@
 Card::Card()
 {
     clr = unknown;
-    number = 10; 
+    number = 11; 
 }
 
 Card::Card(COLOR newClr, short num)
