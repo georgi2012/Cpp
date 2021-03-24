@@ -22,6 +22,7 @@ class Player{
         bool canDraw();
         int getHandSize() const;
         Card removeCard(short index);
+        const Card* getHand() const;
         
 
     private:

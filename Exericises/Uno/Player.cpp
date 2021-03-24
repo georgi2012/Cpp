@@ -110,7 +110,14 @@ bool Player::isValidCard(const unsigned short cardToPlay ,Card lastCard) const
 }//cardToPlay==curNumberOfCards  means drawing a card
 
 bool Player::playCard(unsigned short cardToPlay ,Card lastCard){
+
     //cout<<cardToPlay<<isValidCard(cardToPlay,lastCard)<<" clr "<<hand[cardToPlay].clr <<" num "<<hand[cardToPlay].number<<std::endl;
     //cout<<"cur card: "<<lastCard.clr<<" num: "<<lastCard.number<<std::endl;
       return isValidCard(cardToPlay,lastCard); // not much sense but it's more readable that way...
 }
+
+const Card* Player::getHand() const{
+   return hand;
+ }
+
+

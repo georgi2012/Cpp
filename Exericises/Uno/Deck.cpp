@@ -1,6 +1,6 @@
 #include "Deck.h"
 #include <cstdlib>
-#include <ctime>
+//#include <ctime>
 
 Deck::Deck()
 {
@@ -45,34 +45,34 @@ void Deck::findPlaceInDeck(unsigned short num, unsigned short clrIndex)
     }
 }
 
-bool Deck::isInHand(Card * &Hand , unsigned short num , unsigned short clrIndex) const{
-    
-    int i=0;
-    while(i<10 && Hand[i].number!=11) //while there are cards and we havent found the last card in the hand
+bool Deck::isInHand(const Card *&Hand, unsigned short num, unsigned short clrIndex) const
+{
+
+    int i = 0;
+    while (i < 10 && Hand[i].number != 11) //while there are cards and we havent found the last card in the hand
     {
-       if(Hand[i].number == num && Hand[i].clr == static_cast<COLOR>(clrIndex))
-       {
-           return true;
-       }
-       i++;
+        if (Hand[i].number == num && Hand[i].clr == static_cast<COLOR>(clrIndex))
+        {
+            return true;
+        }
+        i++;
     }
     return false;
-
 }
 
-void Deck::shuffleNewDeck(Card *plrOneHand = nullptr, Card *plrTwoHand = nullptr)
+void Deck::shuffleNewDeck(const Card *plrOneHand ,const Card *plrTwoHand )
 {
-    srand(time(NULL));
+    //srand(time(NULL));
     if (plrOneHand == nullptr) //it's called from constructor
     {
-        for (int i = 0; i < 9; i++) //numbers
+        for (int i = 1; i <= 9; i++) //numbers
         {
-            for (int j = 0; j < 4; j++) //colors
+            for (int j = 1; j <= 4; j++) //colors
             {
                 findPlaceInDeck(i, j);
             }
         }
-        cardsLeft=36;
+        cardsLeft = 36;
         return;
     }
     //cards are supposed to be at 0 now
@@ -80,7 +80,7 @@ void Deck::shuffleNewDeck(Card *plrOneHand = nullptr, Card *plrTwoHand = nullptr
     {
         for (int j = 0; j < 4; j++) //colors
         {
-            if (!isInHand(plrOneHand,i,j) && !isInHand(plrTwoHand,i,j)) // ! IT WILL LEFT HOLES IN THE DECK , TAKE CARE OF THEM LATER !
+            if (!isInHand(plrOneHand, i, j) && !isInHand(plrTwoHand, i, j)) // ! IT WILL LEFT HOLES IN THE DECK , TAKE CARE OF THEM LATER !
             {
                 findPlaceInDeck(i, j);
                 cardsLeft++;
@@ -88,4 +88,23 @@ void Deck::shuffleNewDeck(Card *plrOneHand = nullptr, Card *plrTwoHand = nullptr
         }
     }
     return;
+}
+
+Card Deck::drawCard()
+{ //we should have already checked if there are any cards left!
+    cardsLeft--;
+    int cardIndex=35; //there can be 'holes' in our deck.
+    while (deck[cardIndex].number == 11) //invalid card, continue
+    {
+        cardIndex--;
+    }
+    Card cardToDraw=deck[cardIndex];
+    deck[cardIndex].clr=unknown;
+    deck[cardIndex].number=11;
+    return cardToDraw;
+}
+
+unsigned Deck::getCardsLeft() const
+{
+    return cardsLeft;
 }

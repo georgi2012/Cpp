@@ -6,12 +6,13 @@ class Deck{
         unsigned cardsLeft;
         Card deck[36];
 
-        void shuffleNewDeck(Card* plrOneHand=nullptr,Card* plrTwoHand=nullptr);
-        bool isInHand(Card * &Hand, unsigned short num , unsigned short clrIndex) const;
+        bool isInHand(const Card * &Hand, unsigned short num , unsigned short clrIndex) const;
         void findPlaceInDeck(unsigned short num, unsigned short clrIndex);
 
     public:
         Deck();
-        Card drawCard();
+        Card drawCard(); //takes the next card 
+        unsigned getCardsLeft() const;
+        void shuffleNewDeck(const Card* plrOneHand=nullptr,const Card* plrTwoHand=nullptr);
 
 };

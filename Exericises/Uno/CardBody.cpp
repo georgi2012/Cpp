@@ -10,14 +10,14 @@
 Card::Card()
 {
     clr = unknown;
-    number = 11; 
+    number = 11;
 }
 
 Card::Card(COLOR newClr, short num)
 {
     if(num<0 || num>9)
     {
-       number=10;
+       number=11;
        std::cout<<"Unvalid card format.";
     }
     //if(newClr==unknown) TBD //because of the API :)
