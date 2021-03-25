@@ -55,12 +55,13 @@ Card Player::removeCard(short index)
         }
         curNumberOfCards--;
         hand[curNumberOfCards].clr=unknown;
-        hand[curNumberOfCards].number=10;
+        hand[curNumberOfCards].number= UNKNOWN_NUM;
         return removedCard;
     }
     //else
     removedCard.clr = unknown;
-    removedCard.number = 10;
+    removedCard.number = UNKNOWN_NUM;
+    throw - 1;
     return removedCard;
     //throw error?
 }
@@ -75,7 +76,7 @@ int Player::getHandSize() const
     return curNumberOfCards;
 }
 
-void Player::printHand()
+void Player::printHand(const int currentChoice=-1)
 {
     cout << "Your current Hand :\n";
     for (int i = 0; i < curNumberOfCards; ++i)
@@ -97,10 +98,14 @@ void Player::printHand()
             cout << " Yellow ";
             break;
         default:
-            cout << " Unknown \n";
+            cout << " Unknown ("<<hand[i].clr<<") ";
             break;
         } //switch
         cout << " [" << hand[i].number << "] ";
+        if(currentChoice==i)
+        { 
+            cout << " <--[ Your current choice ]";
+        }
     } //for
 }
 

@@ -16,7 +16,7 @@ class Player{
 
         void drawCard(Card newCard);
         bool playCard(unsigned short cardToPlay ,Card lastCard);
-        void printHand();
+        void printHand(const int currentChoice );
         //void moveCards();
         bool isWinner();
         bool canDraw();

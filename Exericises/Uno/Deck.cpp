@@ -23,7 +23,7 @@ void Deck::findPlaceInDeck(unsigned short num, unsigned short clrIndex)
             br = place;
             isIncreasing = false;
         }
-        if (deck[br].number == 11) //not taken
+        if (deck[br].number == UNKNOWN_NUM) //not taken
         {
             isFoundEmpty = true;
             deck[br].number = num;
@@ -49,7 +49,7 @@ bool Deck::isInHand(const Card *&Hand, unsigned short num, unsigned short clrInd
 {
 
     int i = 0;
-    while (i < 10 && Hand[i].number != 11) //while there are cards and we havent found the last card in the hand
+    while (i < 10 && Hand[i].number != UNKNOWN_NUM) //while there are cards and we havent found the last card in the hand
     {
         if (Hand[i].number == num && Hand[i].clr == static_cast<COLOR>(clrIndex))
         {
@@ -94,13 +94,13 @@ Card Deck::drawCard()
 { //we should have already checked if there are any cards left!
     cardsLeft--;
     int cardIndex=35; //there can be 'holes' in our deck.
-    while (deck[cardIndex].number == 11) //invalid card, continue
+    while (deck[cardIndex].number == UNKNOWN_NUM) //invalid card, continue
     {
         cardIndex--;
     }
     Card cardToDraw=deck[cardIndex];
     deck[cardIndex].clr=unknown;
-    deck[cardIndex].number=11;
+    deck[cardIndex].number= UNKNOWN_NUM;
     return cardToDraw;
 }
 

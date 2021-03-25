@@ -2,9 +2,9 @@
 //#include <cstdlib>
 #include <windows.h>
 #include <ctime>
-
+#include <conio.h>
 #include "Game.h"
-//#include <conio.h>
+
 
 using std::cin;
 using std::cout;
@@ -18,7 +18,7 @@ void Game::printHelperNum(string*& ptr) const
 	{
 	case 1:
 	{
-		ptr=new string [6]{ R"( __ )",
+		ptr = new string[6]{ R"( __ )",
 							R"(/_ |)",
 							R"( | |)",
 							R"( | |)",
@@ -125,20 +125,54 @@ void Game::printHelperNum(string*& ptr) const
 		//ptr = number;
 		return;// ptr;
 	}
+	case DRAW4_NUMBER:
+	{
+		ptr = new string[6]{
+			R"(        _  _    )",
+  R"(    _  | || |   )",
+R"(  _| |_| || |_  )",
+R"( |_   _|__   _| )",
+R"(   |_|    | |   )",
+R"(          |_|   )"
+
+		};
+		return;
+	}
+	case CHANGEDIR_NUMBER:
+	{
+		ptr = new string[6]{
+			R"(    __          __    )",
+R"(   / /          \ \   )",
+R"(  / /   ______   \ \  )",
+R"( < <   |______|   > > )",
+R"(  \ \            / /  )",
+R"(   \_\          /_/   )"
+
+		};
+		return;
+	}
+	case CHANGECOLOR_NUMBER :
+	{
+		ptr = new string[6]{ "","","","","","" };
+		return;
+	}
+
 	default:
+		ptr = new string[6]{ "","","","","","" };
 		return;// nullptr;
 	}
 }
 
+
 void Game::printHelperClr(string*& ptr) const
 {
 	//string *ptr;
-
+	cout << currentCard.clr;
 	switch (currentCard.clr)
 	{
 	case red:
 	{
-		ptr = new string[6]  {
+		ptr = new string[6]{
 			R"(  _____          _  )",
 			R"( |  __ \        | | )",
 			R"( | |__) |___  __| | )",
@@ -186,6 +220,7 @@ void Game::printHelperClr(string*& ptr) const
 		return;// ptr;
 	}
 	default:
+		ptr = new string[6]{ "","","","","","" };
 		return;//nullptr;
 
 	}
@@ -234,59 +269,6 @@ void Game::printCurentCard()
 	string* cardClr;// = printHelperClr();
 	printHelperClr(cardClr);
 
-	//cout << "\nCurrent card : " << currentCard.clr << "  " << currentCard.clr << endl;
-	/*switch (currentCard.clr)
-	{
-	case red:
-	{
-		cout << endl;
-		cout << R"(  _____          _  )" << endl;
-		cout << R"( |  __ \        | | )" << endl;
-		cout << R"( | |__) |___  __| | )" << endl;
-		cout << R"( |  _  // _ \/ _` |)" << endl;
-		cout << R"( | | \ \  __/ (_| | )" << endl;
-		cout << R"( |_|  \_\___|\__,_| )" << endl;
-		break;
-	}
-	case blue:
-	{
-		cout << endl;
-		cout << "   ____  _   " << endl;
-		cout << R"(  |  _ \| |  )" << endl;
-		cout << R"(  | |_) | |_ ___  ___  )" << endl;
-		cout << R"(  |  _ <| | | | |/ _ \ )" << endl;
-		cout << R"(  | |_) | | |_| |  __/ )" << endl;
-		cout << R"(  |____/|_|\__,_|\___| )" << endl
-			 << endl;
-		break;
-	}
-	case yellow:
-	{
-		cout << R"(              _ _               )" << endl;
-		cout << R"(             | | |              )" << endl;
-		cout << R"(   _   _  ___| | | _____      __  )" << endl;
-		cout << R"(  | | | |/ _ \ | |/ _ \ \ /\ / /)" << endl;
-		cout << R"(  | |_| |  __/ | | (_) \ V  V / )" << endl;
-		cout << R"(   \__, |\___|_|_|\___/ \_/\_/ )" << endl;
-		cout << R"(   |___/  )" << endl;
-
-		break;
-	}
-	case green:
-	{
-		cout << R"(   __ _ _ __ ___  ___ _ __   )" << endl;
-		cout << R"(  / _` | '__/ _ \/ _ \ '_ \  )" << endl;
-		cout << R"( | (_| | | |  __/  __/ | | | )" << endl;
-		cout << R"(  \__, |_|  \___|\___|_| |_|)" << endl;
-		cout << R"(   __/ |   )" << endl;
-		cout << R"(  |___/    )" << endl;
-		cout << "\n\n";
-		break;
-	}
-	default:
-		cout << "no such color";
-		break;
-	}*/
 	cout << endl;
 	for (int i = 0; i < 6; i++)
 	{
@@ -299,48 +281,147 @@ void Game::printCurentCard()
 	return;
 }
 
-void Game::printGame()
+void Game::printColorPicker(short choice=-1) const
+{
+	for (int i = 1; i <= 4; i++)
+	{
+		cout << i-1 << ". ";
+		switch (i)
+		{
+		case RED:
+		{
+			cout << "Red ";
+			break;
+		}
+		case BLUE:
+		{
+			cout << "Blue ";
+			break;
+		}
+		case YELLOW:
+		{
+			cout << "Yellow ";
+			break;
+		}
+		case GREEN:
+		{
+			cout << "Green ";
+			break;
+		}
+		default:
+			cout << "No such clr ";
+			break;
+		}//switch
+		if (choice == (i - 1))
+		{
+			cout << " <--[ Your current choice ]";
+		}
+	}//for
+	cout << "\n\nPress Enter to choose this color. ";
+	return;
+
+}
+
+void Game::printGame(const int currentChoice = -1,bool isSpecialCard=false)
 {
 	system("cls");
 	printCurentCard();
 	cout << "Player " << isScndRound + 1 << " 's turn \n";
-	players[isScndRound].printHand();
-	cout << "\n"
-		<< players[isScndRound].getHandSize() << ". Draw a card.";
-	cout << "\n ";
+
+	players[isScndRound].printHand(currentChoice);
+
+	if (!isSpecialCard) {
+		cout << "\n"
+			<< players[isScndRound].getHandSize() << ". Draw a card.";
+		if (currentChoice == players[isScndRound].getHandSize())
+		{
+			cout << " <--[ Your current choice ]";
+			cout << "\n\nPress Enter to draw a card.";
+			return;
+		}
+		if (currentChoice >= 0) {
+			cout << "\n\nPress Enter to play that card. ";
+			return;
+		}
+	}
+	return;
 }
 
-void fixCin()
+/*void fixCin()
 {
 	cin.clear();
 	cin.ignore(100, '\n');
+
+}*/
+
+
+COLOR Game::specialCard_ChangeClr()
+{
+	printGame(-1, true);
+	printColorPicker();
+	//choosing the color to play
+	int playerChoice = -1;
+	char command;
+	do
+	{ 
+		command = _getch();
+		if (command >= '0' && command <= '3' && (command-'0')!=playerChoice)
+		{//if the command is a valid option
+			playerChoice = command - '0';
+			printGame(playerChoice,true);
+			printColorPicker(playerChoice);
+		}
+	} while (command != ENTER_SYMBOW || playerChoice == -1); //untill we press enter 
+
+	return static_cast<COLOR>(playerChoice);
 	
 }
+
+void Game::specialCard_ChangeDir()
+{
+	isScndRound = !isScndRound;
+}
+
+COLOR Game::specialCard_Draw4()
+{ 
+	for (int i = 0; i < 4; i++) {
+		players[!isScndRound].drawCard(generateCard()); //opponent draws 4 cards
+	}
+	return specialCard_ChangeClr(); //we pick a new color
+}
+
 
 bool Game::nextTurn()
 {
 	printGame();
 	int playerChoice = -1;
 	Card removedCard;
-
+	char command;
 	do
 	{ //find a valid card and play it
-		cout << "\nEnter your next card's index: ";
-		// cout<<playerChoice<<endl;
-		if (!cin)
+		//cout << "\nEnter your next card's index: ";
+
+		/*if (!cin)
 		{
 			fixCin();
 		}
-		cin >> playerChoice;
+		cin >> playerChoice;*/
+		command = _getch();//we take the symbow from the keyboard
+		if (command >= '0' && command <= ('9' + 1) && players[isScndRound].playCard((command - '0'), currentCard))
+		{//if the command is a valid option
+			playerChoice = command - '0';
+			printGame(playerChoice);
+		}
 
-	} while (!cin || !(playerChoice >= 0 && playerChoice <= 10 && players[isScndRound].playCard(playerChoice, currentCard)));
+	} while (command != ENTER_SYMBOW || playerChoice == -1); //untill we press enter 
 
 	if (playerChoice == players[isScndRound].getHandSize()) //he has choisen to draw a card
 	{
 		players[isScndRound].drawCard(generateCard()); //draw a card or discard first + draw
 	}
 	else
-	{                                                                //play a card
+	{ //play a card
+		
 		removedCard = players[isScndRound].removeCard(playerChoice); //remove the card from hand
 		currentCard.clr = removedCard.clr;                           //put on table new card
 		currentCard.number = removedCard.number;                     //put on table new card
@@ -364,7 +445,7 @@ bool Game::getPlayerRound() const
 void print(Game& gameSession)
 {
 	 int nums[10]={};
-   int clrs[5]={};
+   int clrs[6]={};
    Card somecard;
    for(int i=0;i<29;i++)
    {
@@ -397,7 +478,7 @@ void print(Game& gameSession)
 
    int i=0;
    const Card* plr=gameSession.players[0].getHand();cout<<"Hand1: \n";
-   while(plr[i].number!=11)
+   while(plr[i].number!=UNKNOWN_NUM)
    {
 	   nums[plr[i].number]++;
 	   clrs[static_cast<int>(plr[i].clr)]++;
@@ -406,7 +487,7 @@ void print(Game& gameSession)
    }
    i=0;
    const Card* plr2=gameSession.players[1].getHand();cout<<"Hand2: \n";
-   while(plr2[i].number!=11)
+   while(plr2[i].number!= UNKNOWN_NUM)
    {
 	   nums[plr2[i].number]++;
 	   clrs[static_cast<int>(plr2[i].clr)]++;
@@ -435,8 +516,8 @@ int main()
 	{
 		// :)
 	}
-	cout << " And the big winner is Player " << gameSession.getPlayerRound() + 1 << " !\n";
-
+	cout << "\n And the big winner is Player " << gameSession.getPlayerRound() + 1 << " !\n";
+	
 	//print(gameSession);
 	//print(gameSession);
 	//cout<<"\nEND\n";
