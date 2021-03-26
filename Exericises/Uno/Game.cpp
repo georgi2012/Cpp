@@ -5,246 +5,242 @@
 #include <conio.h>
 #include "Game.h"
 
-
 using std::cin;
 using std::cout;
 using std::endl;
+using std::nothrow;
 using std::string;
 
-void Game::printHelperNum(string*& ptr) const
+Game::Game()
+{
+	for (int i = 0; i < 2; ++i) //2 players
+	{
+		for (int j = 0; j < 3; j++) //starting hand with 3 cards
+		{
+			players[i].drawCard(generateCard());
+		}
+	}
+	currentCard = generateCard();
+	while (currentCard.number == DRAW4_NUMBER || currentCard.number == CHANGECOLOR_NUMBER) //BLACK CARD
+	{
+		Card nextCard = generateCard();					  //redraw
+		cardsPile.findPlaceInDeck(currentCard.number, 1); //put back in the deck
+		currentCard = nextCard;
+	}
+	isScndRound = false;
+}
+
+void Game::printHelperNum(string *&ptr) const
 {
 	// string *ptr;
 	switch (currentCard.number)
 	{
 	case 1:
 	{
-		ptr = new string[6]{ R"( __ )",
-							R"(/_ |)",
-							R"( | |)",
-							R"( | |)",
-							R"( | |)",
-							R"( |_|)" };
+		ptr = new (nothrow) string[6]{R"( __ )",
+									  R"(/_ |)",
+									  R"( | |)",
+									  R"( | |)",
+									  R"( | |)",
+									  R"( |_|)"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 	case 2:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"( ___  )",
 			R"(|__ \ )",
 			R"(   ) |)",
 			R"(  / / )",
 			R"( / /_ )",
-			R"(|____|)" };
+			R"(|____|)"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 	case 3:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(  ____  )",
 			R"( |___ \ )",
 			R"(   __) |)",
 			R"(  |__ < )",
 			R"(  ___) ))",
-			R"( |____/ )" };
+			R"( |____/ )"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 	case 4:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(  _  _   )",
 			R"( | || |  )",
 			R"( | || |_ )",
 			R"( |__   _|)",
 			R"(    | |  )",
-			R"(    |_|  )" };
+			R"(    |_|  )"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 	case 5:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(  _____ )",
 			R"( | ___| )",
 			R"( | |__  )",
 			R"( |___ \ )",
 			R"(  ___) |)",
-			R"( |____/)" };
+			R"( |____/)"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 	case 6:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(    __  )",
 			R"(   / /  )",
 			R"(  / /_  )",
 			R"( | '_ \ )",
 			R"( | (_) |)",
-			R"(  \___/ )" };
+			R"(  \___/ )"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 
 	case 7:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(  ______ )",
 			R"( |____  |)",
 			R"(     / / )",
 			R"(    / /  )",
 			R"(   / /   )",
-			R"(  /_/    )" };
+			R"(  /_/    )"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 
 	case 8:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(   ___  )",
 			R"(  / _ \ )",
 			R"( | (_) |)",
 			R"(  > _ < )",
 			R"( | (_) |)",
-			R"(  \___/  )" };
+			R"(  \___/  )"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 	case 9:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(   ___  )",
 			R"(  / _ \ )",
 			R"( | (_) |)",
 			R"(  \__, |)",
 			R"(    / / )",
-			R"(   /_/  )" };
+			R"(   /_/  )"};
 		//ptr = number;
-		return;// ptr;
+		return; // ptr;
 	}
 	case DRAW4_NUMBER:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(        _  _    )",
-  R"(    _  | || |   )",
-R"(  _| |_| || |_  )",
-R"( |_   _|__   _| )",
-R"(   |_|    | |   )",
-R"(          |_|   )"
+			R"(    _  | || |   )",
+			R"(  _| |_| || |_  )",
+			R"( |_   _|__   _| )",
+			R"(   |_|    | |   )",
+			R"(          |_|   )"
 
 		};
 		return;
 	}
 	case CHANGEDIR_NUMBER:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(    __          __    )",
-R"(   / /          \ \   )",
-R"(  / /   ______   \ \  )",
-R"( < <   |______|   > > )",
-R"(  \ \            / /  )",
-R"(   \_\          /_/   )"
+			R"(   / /          \ \   )",
+			R"(  / /   ______   \ \  )",
+			R"( < <   |______|   > > )",
+			R"(  \ \            / /  )",
+			R"(   \_\          /_/   )"
 
 		};
 		return;
 	}
-	case CHANGECOLOR_NUMBER :
+	case CHANGECOLOR_NUMBER:
 	{
-		ptr = new string[6]{ "","","","","","" };
+		ptr = new (nothrow) string[6]{"", "", "", "", "", ""};
 		return;
 	}
 
 	default:
-		ptr = new string[6]{ "","","","","","" };
-		return;// nullptr;
+		ptr = new (nothrow) string[6]{"", "", "", "", "", ""};
+		return; // nullptr;
 	}
 }
 
-
-void Game::printHelperClr(string*& ptr) const
+void Game::printHelperClr(string *&ptr) const
 {
 	//string *ptr;
-	cout << currentCard.clr;
+	//cout << currentCard.clr;
 	switch (currentCard.clr)
 	{
 	case red:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(  _____          _  )",
 			R"( |  __ \        | | )",
 			R"( | |__) |___  __| | )",
 			R"( |  _  // _ \/ _` | )",
 			R"( | | \ \  __/ (_| | )",
-			R"( |_|  \_\___|\__,_| )" };
+			R"( |_|  \_\___|\__,_| )"};
 		//ptr = colors;
-		return;//ptr;
+		return; //ptr;
 	}
 	case blue:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(   ____  _             )",
 			R"(  |  _ \| |            )",
 			R"(  | |_) | |_ ___  ___  )",
 			R"(  |  _ <| | | | |/ _ \ )",
 			R"(  | |_) | | |_| |  __/ )",
-			R"(  |____/|_|\__,_|\___| )" };
+			R"(  |____/|_|\__,_|\___| )"};
 		//ptr = colors;
-		return;// ptr;
+		return; // ptr;
 	}
 	case yellow:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(             | | |              )",
 			R"(   _   _  ___| | | _____      __)",
 			R"(  | | | |/ _ \ | |/ _ \ \ /\ / /)",
 			R"(  | |_| |  __/ | | (_) \ V  V / )",
 			R"(   \__, |\___|_|_|\___/ \_/\_/  )",
-			R"(   |___/                        )" };
+			R"(   |___/                        )"};
 
 		//ptr = colors;
-		return;// ptr;
+		return; // ptr;
 	}
 	case green:
 	{
-		ptr = new string[6]{
+		ptr = new (nothrow) string[6]{
 			R"(   __ _ _ __ ___  ___ _ __   )",
 			R"(  / _` | '__/ _ \/ _ \ '_ \  )",
 			R"( | (_| | | |  __/  __/ | | | )",
 			R"(  \__, |_|  \___|\___|_| |_| )",
 			R"(   __/ |                     )",
-			R"(  |___/                      )" };
+			R"(  |___/                      )"};
 		//ptr = colors;
-		return;// ptr;
+		return; // ptr;
 	}
 	default:
-		ptr = new string[6]{ "","","","","","" };
-		return;//nullptr;
-
+		ptr = new (nothrow) string[6]{"", "", "", "", "", ""};
+		return; //nullptr;
 	}
-}
-
-Game::Game()
-{
-	//cardsInPile=4*9;
-	/*for(int i=0;i<4;i++)
-	{
-		for(int j=0;j<9;j++)
-		{
-			cardsPile[i][j]=1; // we can draw that card
-		}
-	}*/
-	for (int i = 0; i < 2; ++i)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			players[i].drawCard(generateCard());
-		}
-	}
-	currentCard = generateCard();
-	isScndRound = false;
 }
 
 Card Game::generateCard()
@@ -261,13 +257,43 @@ Card Game::generateCard()
 	return cardsPile.drawCard();
 }
 
+void printClr(COLOR index)
+{
+	switch (index)
+	{
+	case red:
+		cout << " RED ";
+		return;
+	case blue:
+		cout << " BLUE ";
+		return;
+	case green:
+		cout << " GREEN ";
+		return;
+	case yellow:
+		cout << " YELLOW ";
+		return;
+
+	default:
+		cout << " UNKNOWN ";
+		return;
+	}
+}
+
 void Game::printCurentCard()
 {
 
-	string* cardNum;// = printHelperNum(); //not raw
+	string *cardNum;
 	printHelperNum(cardNum);
-	string* cardClr;// = printHelperClr();
+	string *cardClr;
 	printHelperClr(cardClr);
+	if (!cardNum || !cardClr) //we could not allocate the memory
+	{
+		printClr(currentCard.clr);
+		cout << " " << currentCard.number << endl;
+		delete[] cardNum; // in case we had enough memory for cardNum
+		return;
+	}
 
 	cout << endl;
 	for (int i = 0; i < 6; i++)
@@ -275,17 +301,17 @@ void Game::printCurentCard()
 		cout << cardClr[i] << " " << cardNum[i] << endl;
 	}
 	cout << endl;
-	//cout << currentCard.number << endl;
 	delete[] cardNum;
 	delete[] cardClr;
 	return;
 }
 
-void Game::printColorPicker(short choice=-1) const
+void Game::printColorPicker(short choice = -1) const //helper for Black cards
 {
 	for (int i = 1; i <= 4; i++)
 	{
-		cout << i-1 << ". ";
+		cout << "\n"
+			 << i - 1 << ". ";
 		switch (i)
 		{
 		case RED:
@@ -298,52 +324,56 @@ void Game::printColorPicker(short choice=-1) const
 			cout << "Blue ";
 			break;
 		}
-		case YELLOW:
-		{
-			cout << "Yellow ";
-			break;
-		}
 		case GREEN:
 		{
 			cout << "Green ";
 			break;
 		}
+		case YELLOW:
+		{
+			cout << "Yellow ";
+			break;
+		}
 		default:
 			cout << "No such clr ";
 			break;
-		}//switch
+		} //switch
 		if (choice == (i - 1))
 		{
 			cout << " <--[ Your current choice ]";
 		}
-	}//for
-	cout << "\n\nPress Enter to choose this color. ";
+	} //for
+	cout << "\n\nYou played a black card.\nPress Enter to choose this color. ";
 	return;
-
 }
 
-void Game::printGame(const int currentChoice = -1,bool isSpecialCard=false)
+void Game::printGame(const int currentChoice = -1, bool isSpecialCard = false) //special card are the black ones
 {
 	system("cls");
 	printCurentCard();
 	cout << "Player " << isScndRound + 1 << " 's turn \n";
 
-	players[isScndRound].printHand(currentChoice);
-
-	if (!isSpecialCard) {
+	if (!isSpecialCard)
+	{
+		players[isScndRound].printHand(currentChoice);
 		cout << "\n"
-			<< players[isScndRound].getHandSize() << ". Draw a card.";
+			 << players[isScndRound].getHandSize() << ". Draw a card.";
 		if (currentChoice == players[isScndRound].getHandSize())
 		{
 			cout << " <--[ Your current choice ]";
 			cout << "\n\nPress Enter to draw a card.";
 			return;
 		}
-		if (currentChoice >= 0) {
+		if (currentChoice >= 0)
+		{
 			cout << "\n\nPress Enter to play that card. ";
 			return;
 		}
+		return;
 	}
+
+	players[isScndRound].printHand(-1); //if special card
+
 	return;
 }
 
@@ -354,7 +384,6 @@ void Game::printGame(const int currentChoice = -1,bool isSpecialCard=false)
 
 }*/
 
-
 COLOR Game::specialCard_ChangeClr()
 {
 	printGame(-1, true);
@@ -363,18 +392,18 @@ COLOR Game::specialCard_ChangeClr()
 	int playerChoice = -1;
 	char command;
 	do
-	{ 
+	{
 		command = _getch();
-		if (command >= '0' && command <= '3' && (command-'0')!=playerChoice)
-		{//if the command is a valid option
+		if (command >= '0' && command <= '3' && (command - '0') != playerChoice)
+		{ //if the command is a valid option
 			playerChoice = command - '0';
-			printGame(playerChoice,true);
+			printGame(playerChoice, true);
+			cout << endl;
 			printColorPicker(playerChoice);
 		}
-	} while (command != ENTER_SYMBOW || playerChoice == -1); //untill we press enter 
+	} while (command != ENTER_SYMBOW || playerChoice == -1); //untill we press enter
 
-	return static_cast<COLOR>(playerChoice);
-	
+	return static_cast<COLOR>(playerChoice + 1);
 }
 
 void Game::specialCard_ChangeDir()
@@ -383,13 +412,13 @@ void Game::specialCard_ChangeDir()
 }
 
 COLOR Game::specialCard_Draw4()
-{ 
-	for (int i = 0; i < 4; i++) {
+{
+	for (int i = 0; i < 4; i++)
+	{
 		players[!isScndRound].drawCard(generateCard()); //opponent draws 4 cards
 	}
 	return specialCard_ChangeClr(); //we pick a new color
 }
-
 
 bool Game::nextTurn()
 {
@@ -399,32 +428,47 @@ bool Game::nextTurn()
 	char command;
 	do
 	{ //find a valid card and play it
-		//cout << "\nEnter your next card's index: ";
 
 		/*if (!cin)
 		{
 			fixCin();
 		}
 		cin >> playerChoice;*/
-		command = _getch();//we take the symbow from the keyboard
+		command = _getch(); //we take the symbow from the keyboard
 		if (command >= '0' && command <= ('9' + 1) && players[isScndRound].playCard((command - '0'), currentCard))
-		{//if the command is a valid option
+		{ //if the command is a valid option
 			playerChoice = command - '0';
 			printGame(playerChoice);
 		}
 
-	} while (command != ENTER_SYMBOW || playerChoice == -1); //untill we press enter 
+	} while (command != ENTER_SYMBOW || playerChoice == -1); //untill we press enter
 
 	if (playerChoice == players[isScndRound].getHandSize()) //he has choisen to draw a card
 	{
 		players[isScndRound].drawCard(generateCard()); //draw a card or discard first + draw
 	}
 	else
-	{ //play a card
-		
+	{																 //play a card
 		removedCard = players[isScndRound].removeCard(playerChoice); //remove the card from hand
-		currentCard.clr = removedCard.clr;                           //put on table new card
-		currentCard.number = removedCard.number;                     //put on table new card
+
+		if (removedCard.number == DRAW4_NUMBER)
+		{
+			currentCard.clr = specialCard_Draw4();
+		}
+		else if (removedCard.number == CHANGECOLOR_NUMBER)
+		{
+			currentCard.clr = specialCard_ChangeClr();
+		}
+		else if (removedCard.number == CHANGEDIR_NUMBER)
+		{
+			specialCard_ChangeDir();
+			currentCard.clr = removedCard.clr;
+		}
+		else
+		{
+			currentCard.clr = removedCard.clr; //put on table new card
+		}
+		currentCard.number = removedCard.number;
 	}
 
 	if (players[isScndRound].isWinner())
@@ -511,13 +555,13 @@ void print(Game& gameSession)
 int main()
 {
 	srand(time(NULL));
-	Game gameSession;               //players declared . Cards drawn. First card put on table.
+	Game gameSession;				//players declared . Cards drawn. First card put on table.
 	while (!gameSession.nextTurn()) //while there is no winner
 	{
 		// :)
 	}
-	cout << "\n And the big winner is Player " << gameSession.getPlayerRound() + 1 << " !\n";
-	
+	cout << "\n \nAnd the big winner is Player " << gameSession.getPlayerRound() + 1 << " !\n";
+
 	//print(gameSession);
 	//print(gameSession);
 	//cout<<"\nEND\n";

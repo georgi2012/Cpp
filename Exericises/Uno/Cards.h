@@ -1,8 +1,8 @@
 #pragma once
 
-#define DRAW4_NUMBER 10
+#define CHANGECOLOR_NUMBER 10
 #define CHANGEDIR_NUMBER 11
-#define CHANGECOLOR_NUMBER 12
+#define DRAW4_NUMBER 12
 #define UNKNOWN_NUM 0
 
 enum COLOR
