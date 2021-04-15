@@ -9,7 +9,7 @@ private:
 
 	void copyFrom(const Animal_Family& other);
 public:
-	//Animal_Family();
+	//Animal_Family()
 	Animal_Family(const char* newName, unsigned int newNum);
 	Animal_Family(const Animal_Family& other);
 	Animal_Family& operator=(const Animal_Family& other);
