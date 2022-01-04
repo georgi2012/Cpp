@@ -7,4 +7,4 @@ For _OOP of FMI_ solutions __goto PracticumOOP_branch;__
 
 For _SDP of FMI_ solutions __goto SDP_branch;__
 
-For something interesting go to master branch.
+For something else go to master branch.
