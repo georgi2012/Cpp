@@ -1,8 +1,0 @@
--Monsters:
-Blue eyes White dragon 3000 2500 8
-Dark Magician 2500 2100 7
-Obelisk the Tomentor 4000 4000 12
--Spells:
-Monster Reborn
-Fissure
-Pot of Greed
